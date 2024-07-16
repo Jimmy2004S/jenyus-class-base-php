@@ -8,42 +8,75 @@ class DynamicModel
 {
     use ModelFormat;
 
-    private $conexion;
-    protected $query;
-    protected $table;
+    private $conexion; // Objeto PDO para la conexión a la base de datos
+    protected $query; // Objeto de consulta PDO
+    protected $table; // Nombre de la tabla en la base de datos
 
+    /**
+     * Constructor de la clase DynamicModel.
+     * 
+     * @param PDO $conexion Objeto PDO para la conexión a la base de datos.
+     */
     public function __construct(PDO $conexion)
     {
         $this->conexion = $conexion;
     }
 
-    public function table($table){
+    /**
+     * Establece la tabla en la que se ejecutarán las consultas.
+     * 
+     * @param string $table Nombre de la tabla en la base de datos.
+     * @return $this
+     */
+    public function table($table)
+    {
         $this->table = $table;
         return $this;
     }
 
+    /**
+     * Ejecuta una consulta SQL personalizada.
+     * 
+     * @param string $sql Consulta SQL a ejecutar.
+     * @return $this
+     */
     public function query($sql)
     {
         $this->query = $this->conexion->query($sql);
         return $this;
     }
 
+    /**
+     * Obtiene la primera fila de resultados de la consulta actual.
+     * 
+     * @return array|false Arreglo asociativo con los resultados de la consulta.
+     */
     public function first()
     {
         return $this->query->fetch(\PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Obtiene todos los resultados de la consulta actual.
+     * 
+     * @return array Arreglo de arreglos asociativos con los resultados de la consulta.
+     */
     public function get()
     {
         return $this->query->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    //Consultas preparadas
+    /**
+     * Ejecuta una consulta para obtener todos los registros de la tabla especificada.
+     * 
+     * @param array $columns Columnas a seleccionar (por defecto ['*']).
+     * @return $this
+     */
     public function all($columns = ['*'])
     {
-        // Convertimos el array de columnas a una cadena separada por comas
+        // Convertir el array de columnas en una cadena separada por comas
         $columnsStr = implode(', ', $columns);
-        // Construimos la consulta preparada
+        // Construir la consulta preparada
         $sql = "SELECT {$columnsStr} FROM {$this->table}";
         try {
             $stmt = $this->conexion->prepare($sql);
@@ -55,11 +88,20 @@ class DynamicModel
         }
     }
 
+    /**
+     * Ejecuta una consulta con una cláusula WHERE.
+     * 
+     * @param string $column Columna para la condición WHERE.
+     * @param mixed $value Valor a comparar.
+     * @param string $operator Operador de comparación (por ejemplo, '=', '>', '<', etc.).
+     * @param array $columns Columnas a seleccionar (por defecto ['*']).
+     * @return array Arreglo con el resultado de la consulta.
+     */
     public function where($column, $value, $operator, $columns = ['*'])
     {
-        // Convertimos el array de columnas a una cadena separada por comas
+        // Convertir el array de columnas en una cadena separada por comas
         $columnsStr = implode(', ', $columns);
-        // Construimos la consulta preparada
+        // Construir la consulta preparada
         $sql = "SELECT {$columnsStr} FROM {$this->table} WHERE {$column} {$operator} :value";
         try {
             $stmt = $this->conexion->prepare($sql);
@@ -72,11 +114,20 @@ class DynamicModel
         }
     }
 
+    /**
+     * Busca un registro por su valor en una columna específica.
+     * 
+     * @param mixed $value Valor a buscar.
+     * @param array $columns Columnas a seleccionar (por defecto ['*']).
+     * @param string $operator Operador de comparación (por ejemplo, '=', '>', '<', etc.).
+     * @param string $column Columna para la condición de búsqueda (por defecto 'id').
+     * @return array Arreglo con el resultado de la consulta.
+     */
     public function find($value, $columns = ['*'], $operator = '=', $column = 'id')
     {
-        // Convertimos el array de columnas a una cadena separada por comas
+        // Convertir el array de columnas en una cadena separada por comas
         $columnsStr = implode(', ', $columns);
-        // Construimos la consulta preparada
+        // Construir la consulta preparada
         $sql = "SELECT {$columnsStr} FROM {$this->table} WHERE {$column} {$operator} :value";
         try {
             $stmt = $this->conexion->prepare($sql);
@@ -89,21 +140,28 @@ class DynamicModel
         }
     }
 
+    /**
+     * Inserta nuevos registros en la tabla especificada.
+     * 
+     * @param array $columns Nombres de las columnas.
+     * @param array $values Valores a insertar.
+     * @return array Arreglo con el resultado de la inserción.
+     */
     public function insert($columns = [], $values = [])
     {
-        // Añadimos created_at a las columnas y su valor correspondiente a los valores
+        // Añadir 'created_at' a las columnas y su valor correspondiente a los valores
         $columns[] = 'created_at';
         $values[] = $this->basicCurrentFormatDate();
 
-        // Convertimos el array de columnas a una cadena separada por comas
+        // Convertir el array de columnas en una cadena separada por comas
         $columnsStr = implode(', ', $columns);
-        // Preparamos las cadenas de valores con los placeholders
+        // Preparar las cadenas de valores con los placeholders
         $valuesStr = ':' . implode(', :', $columns);
 
         $sql = "INSERT INTO {$this->table} ({$columnsStr}) VALUES ({$valuesStr})";
         try {
             $stmt = $this->conexion->prepare($sql);
-            // Asignamos los valores a los placeholders
+            // Asignar valores a los placeholders
             foreach ($columns as $key => $column) {
                 $value = $values[$key];
                 $param_type = is_int($value) ? \PDO::PARAM_INT : \PDO::PARAM_STR;
@@ -119,6 +177,15 @@ class DynamicModel
         }
     }
 
+    /**
+     * Actualiza registros en la tabla especificada.
+     * 
+     * @param array $columns Columnas a actualizar.
+     * @param mixed $value Valor de la condición WHERE.
+     * @param string $operator Operador de comparación (por ejemplo, '=', '>', '<', etc.).
+     * @param string $column Columna para la condición WHERE (por defecto 'id').
+     * @return array Arreglo con el resultado de la actualización.
+     */
     public function update($columns = [], $value, $operator = '=', $column = 'id')
     {
         // Construir la cadena SET
@@ -146,6 +213,14 @@ class DynamicModel
         }
     }
 
+    /**
+     * Elimina registros de la tabla especificada.
+     * 
+     * @param mixed $value Valor de la condición WHERE.
+     * @param string $operator Operador de comparación (por ejemplo, '=', '>', '<', etc.).
+     * @param string $column Columna para la condición WHERE (por defecto 'id').
+     * @return array Arreglo con el resultado de la eliminación.
+     */
     public function delete($value, $operator = '=', $column = 'id')
     {
         $sql = "DELETE FROM {$this->table} WHERE {$column} {$operator} :value";
