@@ -103,7 +103,7 @@ $user = $userModel->find(1)->first();
 Establece la tabla con la que trabajar.
 #### - query($sql)
 Ejecuta una consulta SQL personalizada.
-####- all($columns = ['*'])
+#### - all($columns = ['*'])
 Ejecuta una consulta para obtener todos los registros.
 #### - where($column, $value, $operator, $columns = ['*'])
 Ejecuta una consulta con una cláusula WHERE.
@@ -120,9 +120,8 @@ Ejecuta una consulta de eliminación en la base de datos.
 ## Notas
 #### 1. Columna created_at
    * Las tablas en tu base de datos necesitan tener una columna llamada created_at. La clase maneja automaticamente, la fecha actual en la que se crea el registro.
-   * Si quieres no usar esta columna puedes pasar en el metodo que manejen creaacion de registros un false como segundo parametro.
+   * Si quieres no usar esta columna puedes pasar en el metodo que manejen un false como segundo parametro en el metodo insert.
      ```class->insert([] , false)```
-     ```class->update([], $value, false, $operator = '=', $column = 'id)```
 
 
 
