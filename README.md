@@ -4,10 +4,17 @@ Este paquete proporciona una clase base para realizar consultas dinámicas en ba
 
 ## Instalación
 
-Puedes instalar este paquete a través de Composer. Ejecuta el siguiente comando en tu terminal:
-```
-composer require jenyus/class-base-php
-```
+Puedes instalar este paquete a través de Composer. 
+1. Instalar composer en su proyecto
+``` composer install ```
+
+2. Permitir la compatibilidad con el paquete agregando la siguiente linea en el archivo composer.json 
+   
+      ``` "minimum-stability": "dev" ```
+
+3. Ejecuta el siguiente comando en tu terminal:
+   
+    ```composer require jenyus/class-base-php```
 
 ## Uso básico
 
