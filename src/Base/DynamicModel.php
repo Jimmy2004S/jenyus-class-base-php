@@ -98,7 +98,7 @@ class DynamicModel
      * @param array $columns Columnas a seleccionar (por defecto ['*']).
      * @return array Arreglo con el resultado de la consulta.
      */
-    public function where($column, $value, $operator, $columns = ['*'])
+    public function where($column, $value, $operator = "=", $columns = ['*'])
     {
         // Convertir el array de columnas en una cadena separada por comas
         $columnsStr = implode(', ', $columns);
