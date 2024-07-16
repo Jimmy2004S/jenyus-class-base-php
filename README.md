@@ -103,7 +103,18 @@ Ejecuta una consulta con una cláusula WHERE.
 Ejecuta una consulta para encontrar un registro por ID u otra columna.
 #### - insert($columns = [], $values = [])
 Ejecuta una consulta de inserción en la base de datos.
-#### - update($columns = [], $value, $operator = '=', $column = 'id')
+#### - update($columns = [], $value, $dateTime = true, $operator = '=', $column = 'id')
 Ejecuta una consulta de actualización en la base de datos.
-#### - delete($value, $operator = '=', $column = 'id'): Ejecuta una consulta de eliminación en la base de datos.
+#### - delete($value, $operator = '=', $column = 'id')
+Ejecuta una consulta de eliminación en la base de datos.
+
+
+## Notas
+#### 1. Columna created_at
+   * Las tablas en tu base de datos necesitan tener una columna llamada created_at. La clase maneja automaticamente, la fecha actual en la que se crea el registro.
+   * Si quieres no usar esta columna puedes pasar en el metodo que manejen creaacion de registros un false como segundo parametro.
+     ```class->insert([] , false)```
+     ```class->update([], $value, false, $operator = '=', $column = 'id)```
+
+
 
