@@ -81,10 +81,10 @@ Utiliza los métodos proporcionados por DynamicModel para ejecutar consultas en 
 Crear una instancia del modelo
   $userModel = new User();
 
-Ejemplo de consulta: obtener todos los usuarios
+* obtener todos los usuarios
 $users = $userModel->all()->get();
  
-Ejemplo de consulta: obtener un usuario por ID
+* obtener un usuario por ID
 $user = $userModel->find(1)->first();
 
 
