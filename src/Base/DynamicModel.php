@@ -1,4 +1,5 @@
 <?php
+
 namespace Jenyus\Base;
 
 use Jenyus\Base\Util\ModelFormat;
@@ -143,39 +144,51 @@ class DynamicModel
     /**
      * Inserta nuevos registros en la tabla especificada.
      * 
-     * @param array $columns Nombres de las columnas.
-     * @param array $values Valores a insertar.
+     * @param array $columns array asociativo con las columnas y valores
      * @return array Arreglo con el resultado de la inserción.
      */
-    public function insert($columns = [], $values = [])
+    public function insert($columns = [], $dateTime = true)
     {
         // Añadir 'created_at' a las columnas y su valor correspondiente a los valores
-        $columns[] = 'created_at';
-        $values[] = $this->basicCurrentFormatDate();
+        if($dateTime){
+            $columns['created_at'] = $this->basicCurrentFormatDate();
+        }
+        $columnNames = '';
+        $placeholders = '';
+        $values = [];
 
-        // Convertir el array de columnas en una cadena separada por comas
-        $columnsStr = implode(', ', $columns);
-        // Preparar las cadenas de valores con los placeholders
-        $valuesStr = ':' . implode(', :', $columns);
+        foreach ($columns as $key => $value) {
+            $columnNames .= $key . ', ';
+            $placeholders .= ':' . $key . ', ';
+            $values[':' . $key] = $value;
+        }
 
-        $sql = "INSERT INTO {$this->table} ({$columnsStr}) VALUES ({$valuesStr})";
+        // Eliminar las comas y espacios al final de las cadenas
+        $columnNames = rtrim($columnNames, ', ');
+        $placeholders = rtrim($placeholders, ', ');
+
+        $sql = "INSERT INTO {$this->table} ({$columnNames}) VALUES ({$placeholders})";
         try {
             $stmt = $this->conexion->prepare($sql);
             // Asignar valores a los placeholders
-            foreach ($columns as $key => $column) {
-                $value = $values[$key];
+            foreach ($values as $key => $value) {
                 $param_type = is_int($value) ? \PDO::PARAM_INT : \PDO::PARAM_STR;
-                $stmt->bindValue(':' . $column, $value, $param_type);
+                $stmt->bindValue($key, $value, $param_type);
             }
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
                 $id = $this->conexion->lastInsertId();
                 return [true, $id];
             }
+            // Si no se insertó ninguna fila (rowCount <= 0), puede manejarlo según tus requerimientos.
+            return [false, 'No se insertaron filas'];
         } catch (\PDOException $e) {
+            die($$e->getMessage());
+            // Manejar errores de PDO
             return [false, $e->getMessage()];
         }
     }
+
 
     /**
      * Actualiza registros en la tabla especificada.
