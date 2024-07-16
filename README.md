@@ -31,10 +31,10 @@ class DB{
 
     private function __construct()
     {
-        $this->schema = $_ENV['DATABASE'];
-        $this->host = $_ENV['DB_HOST'];
-        $this->password = $_ENV['DB_PASS'];
-        $this->user = $_ENV['DB_USER'];
+        $this->schema = 'nombre_de_la_bd';
+        $this->host = 'localhost';
+        $this->password = 'password';
+        $this->user = 'user';
 
         try {
             $this->pdo = new \PDO("mysql:host=$this->host;dbname=$this->schema", $this->user, $this->password);
