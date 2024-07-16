@@ -68,7 +68,7 @@ class User extends DynamicModel
     public function __construct()
     {
         $this->connection = DB::getConnection();
-        parent::__construct($this->connection);  // Llama al constructor del padre (DynamicModel)
+        parent::__construct($this->connection);  // Llama al constructor del padre (DynamicModel) pasando la conexion a tu basa de datos
     }
 }
 ```
