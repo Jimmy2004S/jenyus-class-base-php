@@ -106,7 +106,8 @@ class DynamicModel
         $sql = "SELECT {$columnsStr} FROM {$this->table} WHERE {$column} {$operator} :value";
         try {
             $stmt = $this->conexion->prepare($sql);
-            $stmt->bindParam(':value', $value, \PDO::PARAM_STR);
+            $param_type = is_int($value) ? \PDO::PARAM_INT : \PDO::PARAM_STR;
+            $stmt->bindParam(':value', $value, $param_type);
             $stmt->execute();
             $this->query = $stmt;
             return [true, $this];
@@ -132,7 +133,8 @@ class DynamicModel
         $sql = "SELECT {$columnsStr} FROM {$this->table} WHERE {$column} {$operator} :value";
         try {
             $stmt = $this->conexion->prepare($sql);
-            $stmt->bindParam(':value', $value, \PDO::PARAM_STR);
+            $param_type = is_int($value) ? \PDO::PARAM_INT : \PDO::PARAM_STR;
+            $stmt->bindParam(':value', $value, $param_type);
             $stmt->execute();
             $this->query = $stmt;
             return [true, $this];
@@ -238,7 +240,8 @@ class DynamicModel
         $sql = "DELETE FROM {$this->table} WHERE {$column} {$operator} :value";
         try {
             $stmt = $this->conexion->prepare($sql);
-            $stmt->bindParam(':value', $value, \PDO::PARAM_STR);
+            $param_type = is_int($value) ? \PDO::PARAM_INT : \PDO::PARAM_STR;
+            $stmt->bindParam(':value', $value, $param_type);
             $stmt->execute();
             return [$stmt->rowCount() > 0, 'Eliminado'];
         } catch (\PDOException $e) {
