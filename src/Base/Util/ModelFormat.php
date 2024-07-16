@@ -1,5 +1,5 @@
 <?php
-namespace Lib\Util;
+namespace Jenyus\Base\Util;
 
 trait ModelFormat{
 

@@ -13,23 +13,27 @@ class ComposerStaticInit108be68e4e2b97fed51d36a10eed0849
     );
 
     public static $prefixLengthsPsr4 = array (
+        'd' => 
+        array (
+            'database\\' => 9,
+        ),
         'S' => 
         array (
             'Symfony\\Polyfill\\Php80\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Polyfill\\Ctype\\' => 23,
         ),
-        'R' => 
-        array (
-            'Routes\\' => 7,
-        ),
         'P' => 
         array (
             'PhpOption\\' => 10,
         ),
-        'L' => 
+        'M' => 
         array (
-            'Lib\\' => 4,
+            'Model\\' => 6,
+        ),
+        'J' => 
+        array (
+            'Jenyus\\Base\\' => 12,
         ),
         'G' => 
         array (
@@ -38,15 +42,14 @@ class ComposerStaticInit108be68e4e2b97fed51d36a10eed0849
         'D' => 
         array (
             'Dotenv\\' => 7,
-            'DataBase\\' => 9,
-        ),
-        'A' => 
-        array (
-            'App\\' => 4,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'database\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/database',
+        ),
         'Symfony\\Polyfill\\Php80\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php80',
@@ -59,17 +62,17 @@ class ComposerStaticInit108be68e4e2b97fed51d36a10eed0849
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
         ),
-        'Routes\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/Routes',
-        ),
         'PhpOption\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption',
         ),
-        'Lib\\' => 
+        'Model\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/Lib',
+            0 => __DIR__ . '/../..' . '/Model',
+        ),
+        'Jenyus\\Base\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/Base',
         ),
         'GrahamCampbell\\ResultType\\' => 
         array (
@@ -78,14 +81,6 @@ class ComposerStaticInit108be68e4e2b97fed51d36a10eed0849
         'Dotenv\\' => 
         array (
             0 => __DIR__ . '/..' . '/vlucas/phpdotenv/src',
-        ),
-        'DataBase\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/DataBase',
-        ),
-        'App\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/App',
         ),
     );
 

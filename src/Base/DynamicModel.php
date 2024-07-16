@@ -1,27 +1,25 @@
 <?php
+namespace Jenyus\Base;
 
-namespace Lib;
+use Jenyus\Base\Util\ModelFormat;
+use PDO;
 
-use DataBase\Config\DB;
-use Lib\Util\ModelFormat;
-
-class Model extends DB
+class DynamicModel
 {
     use ModelFormat;
 
-    protected $conexion;
+    private $conexion;
     protected $query;
     protected $table;
 
-    public function __construct()
+    public function __construct(PDO $conexion)
     {
-        $con = new DB();
-        $this->conexion = $con->Connection();
+        $this->conexion = $conexion;
     }
 
-    public function getConexion()
-    {
-        return $this->conexion;
+    public function table($table){
+        $this->table = $table;
+        return $this;
     }
 
     public function query($sql)

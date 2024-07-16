@@ -3,15 +3,12 @@
   "description": "El paquete provee una clase base para manejar algunas consultas de modelos de forma dinamica. Ademas de ya traer una estructura base para proyectos mvc",
   "type": "library",
   "require": {
-    "vlucas/phpdotenv": "^5.6",
-    "php": ">=8.2"
+    "php": ">=8.2",
+    "vlucas/phpdotenv": "5.6"
   },
   "autoload": {
     "psr-4": {
-      "App\\": "App/",
-      "Lib\\": "Lib/",
-      "DataBase\\": "DataBase/",
-      "Routes\\": "Routes/"
+      "Jenyus\\Base\\": "src/Base/"
     }
   },
   "license": "MIT",
