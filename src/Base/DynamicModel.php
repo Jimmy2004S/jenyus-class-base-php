@@ -183,7 +183,6 @@ class DynamicModel
             // Si no se insertó ninguna fila (rowCount <= 0), puede manejarlo según tus requerimientos.
             return [false, 'No se insertaron filas'];
         } catch (\PDOException $e) {
-            die($$e->getMessage());
             // Manejar errores de PDO
             return [false, $e->getMessage()];
         }
@@ -220,7 +219,7 @@ class DynamicModel
             $param_type = is_int($value) ? \PDO::PARAM_INT : \PDO::PARAM_STR;
             $stmt->bindValue(":whereValue", $value, $param_type);
             $stmt->execute();
-            return [$stmt->rowCount() > 0, ''];
+            return [$stmt->rowCount() > 0, 'Actualizado'];
         } catch (\PDOException $e) {
             return [false, $e->getMessage()];
         }
@@ -241,7 +240,7 @@ class DynamicModel
             $stmt = $this->conexion->prepare($sql);
             $stmt->bindParam(':value', $value, \PDO::PARAM_STR);
             $stmt->execute();
-            return [$stmt->rowCount() > 0, ''];
+            return [$stmt->rowCount() > 0, 'Eliminado'];
         } catch (\PDOException $e) {
             return [false, $e->getMessage()];
         }
