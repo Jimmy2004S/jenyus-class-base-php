@@ -4,10 +4,17 @@ Este paquete proporciona una clase base para realizar consultas dinámicas en ba
 
 ## Instalación
 
-Puedes instalar este paquete a través de Composer. Ejecuta el siguiente comando en tu terminal:
-```
-composer require jenyus/class-base-php
-```
+Puedes instalar este paquete a través de Composer. 
+1. Instalar composer en su proyecto
+``` composer install ```
+
+2. Permitir la compatibilidad con el paquete agregando la siguiente linea en el archivo composer.json 
+   
+      ``` "minimum-stability": "dev" ```
+
+3. Ejecuta el siguiente comando en tu terminal:
+   
+    ```composer require jenyus/class-base-php```
 
 ## Uso básico
 
@@ -54,7 +61,7 @@ class DB{
 }
 ```
 
-### 2. Extender de la clase del paquete
+### 2. Extender de la clase del paquete (DynamicModel)
 ```php
 namespace App\Model;
 
@@ -68,7 +75,8 @@ class User extends DynamicModel
     public function __construct()
     {
         $this->connection = DB::getConnection();
-        parent::__construct($this->connection);  // Llama al constructor del padre (DynamicModel) pasando la conexion a tu basa de datos
+         // Llama al constructor del padre (DynamicModel) pasando la conexion a tu base de datos
+        parent::__construct($this->connection);  
     }
 }
 ```
@@ -95,7 +103,7 @@ $user = $userModel->find(1)->first();
 Establece la tabla con la que trabajar.
 #### - query($sql)
 Ejecuta una consulta SQL personalizada.
-####- all($columns = ['*'])
+#### - all($columns = ['*'])
 Ejecuta una consulta para obtener todos los registros.
 #### - where($column, $value, $operator, $columns = ['*'])
 Ejecuta una consulta con una cláusula WHERE.
@@ -112,9 +120,8 @@ Ejecuta una consulta de eliminación en la base de datos.
 ## Notas
 #### 1. Columna created_at
    * Las tablas en tu base de datos necesitan tener una columna llamada created_at. La clase maneja automaticamente, la fecha actual en la que se crea el registro.
-   * Si quieres no usar esta columna puedes pasar en el metodo que manejen creaacion de registros un false como segundo parametro.
+   * Si quieres no usar esta columna puedes pasar en el metodo que manejen un false como segundo parametro en el metodo insert.
      ```class->insert([] , false)```
-     ```class->update([], $value, false, $operator = '=', $column = 'id)```
 
 
 
