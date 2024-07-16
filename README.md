@@ -73,6 +73,7 @@ class User extends DynamicModel
 }
 ```
 
+
 ### Realizar consultas:
 
 Utiliza los métodos proporcionados por DynamicModel para ejecutar consultas en la base de datos. Aquí tienes algunos ejemplos:
@@ -85,6 +86,7 @@ $users = $userModel->all()->get();
  
 Ejemplo de consulta: obtener un usuario por ID
 $user = $userModel->find(1)->first();
+
 
 
 ### Métodos disponibles en DynamicModel
