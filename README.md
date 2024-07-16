@@ -61,7 +61,7 @@ class DB{
 }
 ```
 
-### 2. Extender de la clase del paquete
+### 2. Extender de la clase del paquete (DynamicModel)
 ```php
 namespace App\Model;
 
@@ -75,7 +75,8 @@ class User extends DynamicModel
     public function __construct()
     {
         $this->connection = DB::getConnection();
-        parent::__construct($this->connection);  // Llama al constructor del padre (DynamicModel) pasando la conexion a tu basa de datos
+         // Llama al constructor del padre (DynamicModel) pasando la conexion a tu base de datos
+        parent::__construct($this->connection);  
     }
 }
 ```
