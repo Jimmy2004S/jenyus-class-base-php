@@ -8,7 +8,8 @@
   },
   "autoload": {
     "psr-4": {
-      "Jenyus\\Base\\": "src/Base/"
+      "Jenyus\\Base\\": "src/Base/",
+      "Jenyus\\Exception\\": "src/Exception/"
     }
   },
   "license": "MIT",
