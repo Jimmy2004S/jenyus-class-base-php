@@ -1,6 +1,9 @@
 
 Todos los cambios notables en este proyecto se documentarán en este archivo.
 
+# Como actualizar el paquete
+ ``` composer update ``` 
+
 ## [No lanzado]
 ### Añadido
 - Uso de transacciones para mantener la coherencia de los datos
