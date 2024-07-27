@@ -23,10 +23,13 @@ class DynamicModel
      * @param $table Puedes definir opcionalmemte la propiedad table, al iniciar tu objeto.
      * @throws PDOException Si no se proporciona una instancia válida de PDO.
      */
-    public function __construct(PDO $conexion)
+    public function __construct(PDO $conexion, $table = null)
     {
         if (!$conexion instanceof PDO) {
             throw new InvalidArgumentException("Error in Jenyus\Base\DynamicModel: Se requiere una instancia válida de PDO.", 422);
+        }
+        if ($table != null) {
+            $this->SetTable($table);
         }
         $this->conexion = $conexion;
     }
@@ -48,6 +51,7 @@ class DynamicModel
 
     /**
      * @return $this->table value del objeto actual
+     * @throws InvalidArgumentException Si los argumentos no son válidos.
      */
     public function getTable()
     {
@@ -62,6 +66,7 @@ class DynamicModel
      * 
      * @param string $sql Consulta SQL a ejecutar.
      * @return $this
+     * @throws PDOException Si ocurre un error con la base de datos.
      */
     public function query($sql)
     {
@@ -77,6 +82,8 @@ class DynamicModel
      * Obtiene la primera fila de resultados de la consulta actual.
      * 
      * @return array|false Arreglo asociativo con los resultados de la consulta.
+     * @throws InvalidArgumentException Si los argumentos no son válidos.
+     * @throws PDOException Si ocurre un error con la base de datos.
      */
     public function first()
     {
@@ -98,6 +105,8 @@ class DynamicModel
      * Obtiene todos los resultados de la consulta actual.
      * 
      * @return array Arreglo de arreglos asociativos con los resultados de la consulta.
+     * @throws InvalidArgumentException Si los argumentos no son válidos.
+     * @throws PDOException Si ocurre un error con la base de datos.
      */
     public function get()
     {
@@ -120,6 +129,8 @@ class DynamicModel
      * 
      * @param array $columns Columnas a seleccionar (por defecto ['*']).
      * @return $this
+     * @throws InvalidArgumentException Si los argumentos no son válidos.
+     * @throws PDOException Si ocurre un error con la base de datos.ror interno.
      */
     public function all($columns = ['*'])
     {
@@ -137,7 +148,7 @@ class DynamicModel
             $stmt = $this->conexion->prepare($sql);
             $stmt->execute();
             $this->query = $stmt;
-            return $this;
+            return $this->get();
         } catch (PDOException $e) {
             throw new PDOException('Error in Jenyus\Base\DynamicModel: ' . $e->getMessage(), 500);
         }
@@ -149,8 +160,12 @@ class DynamicModel
      * @param string $column Columna para la condición WHERE.
      * @param mixed $value Valor a comparar.
      * @param string $operator Operador de comparación (por ejemplo, '=', '>', '<', etc.).
+     * @return $this
      * @param array $columns Columnas a seleccionar (por defecto ['*']).
      * @return array Arreglo con el resultado de la consulta.
+     * @throws InvalidArgumentException Si los argumentos no son válidos.
+     * @throws PDOException Si ocurre un error con la base de datos.
+     * @throws Exception Si ocurre un error interno.
      */
     public function where($column, $value, $operator = "=", $columns = ['*'])
     {
@@ -185,11 +200,14 @@ class DynamicModel
      * @param string $operator Operador de comparación (por ejemplo, '=', '>', '<', etc.).
      * @param string $column Columna para la condición de búsqueda (por defecto 'id').
      * @return array Arreglo con el resultado de la consulta.
+     * @throws InvalidArgumentException Si los argumentos no son válidos.
+     * @throws PDOException Si ocurre un error con la base de datos.
+     * @throws Exception Si ocurre un error interno.
      */
     public function find($value, $columns = ['*'], $operator = '=', $column = 'id')
     {
         if (!is_array($columns)) {
-            throw new InvalidArgumentException("The argument must be array", 422);
+            throw new InvalidArgumentException("Error in Jenyus\Base\DynamicModel: The argument must be array", 422);
         }
 
         $this->getTable();
@@ -206,7 +224,9 @@ class DynamicModel
             $this->query = $stmt;
             return $this->first();
         } catch (PDOException $e) {
-            throw new PDOException("Error en el servidor: " . $e->getMessage(), 500);
+            throw new PDOException("Error in Jenyus\Base\DynamicModel: " . $e->getMessage(), 500);
+        } catch (Exception $e) {
+            throw new PDOException("Error in Jenyus\Base\DynamicModel: " . $e->getMessage(), 500);
         }
     }
 
@@ -214,7 +234,10 @@ class DynamicModel
      * Inserta nuevos registros en la tabla especificada.
      * 
      * @param array $columns array asociativo con las columnas y valores
-     * @return array id del registro insertado.
+     * @return int id del registro insertado.
+     * @throws InvalidArgumentException Si los argumentos no son válidos.
+     * @throws PDOException Si ocurre un error con la base de datos.
+     * @throws Exception Si ocurre un error interno.
      */
     public function insert($columns = [], $dateTime = true)
     {
@@ -256,7 +279,6 @@ class DynamicModel
             }
 
             throw new \RuntimeException('Jenyus\Base\DynamicModel: No se insertaron filas', 204);
-
         } catch (PDOException $e) {
             throw new PDOException("Error in Jenyus\Base\DynamicModel: " . $e->getMessage(), 500);
         } catch (\Exception $e) {
@@ -268,16 +290,19 @@ class DynamicModel
     /**
      * Actualiza registros en la tabla especificada.
      * 
-     * @param array $columns Columnas a actualizar.
+     * @param array $columns Array asociativo con las columnas y sus nuevos valores.
      * @param mixed $value Valor de la condición WHERE.
-     * @param string $operator Operador de comparación (por ejemplo, '=', '>', '<', etc.).
+     * @param string $operator Operador de comparación (por defecto '=').
      * @param string $column Columna para la condición WHERE (por defecto 'id').
-     * @return array Arreglo con el resultado de la actualización.
+     * @return int id del registro actualizado
+     * @throws InvalidArgumentException Si los argumentos no son válidos.
+     * @throws PDOException Si ocurre un error con la base de datos.
+     * @throws Exception Si ocurre un error interno.
      */
     public function update($columns = [], $value, $operator = '=', $column = 'id')
     {
-        $data = $this->find($value, ['id'], $operator, $column);
-        if (!$data) {
+        $user = $this->find($value, ['id'], $operator, $column);
+        if (!$user) {
             throw new PDOException("Error in Jenyus\Base\DynamicModel: el recurso no existe", 404);
         }
         $this->getTable();
@@ -325,16 +350,19 @@ class DynamicModel
      * @param mixed $value Valor de la condición WHERE.
      * @param string $operator Operador de comparación (por ejemplo, '=', '>', '<', etc.).
      * @param string $column Columna para la condición WHERE (por defecto 'id').
-     * @return array Arreglo con el resultado de la eliminación.
+     * @return true Si el registro fue eliminado con exito.    
+     * @throws InvalidArgumentException Si los argumentos no son válidos.
+     * @throws PDOException Si ocurre un error con la base de datos.
+     * @throws Exception Si ocurre un error interno.
+     * 
      */
     public function delete($value, $operator = '=', $column = 'id')
     {
         $this->getTable();
-
         $user = $this->find($value, ['id'], $operator, $column);
 
         if (!$user) {
-            throw new PDOException("Error in Jenyus\Base\DynamicModel: el registro no existe", 404);
+            throw new \PDOException("Error in Jenyus\Base\DynamicModel: el registro no existe", 404);
             return;
         }
 
@@ -344,15 +372,15 @@ class DynamicModel
             $param_type = is_int($value) ? \PDO::PARAM_INT : \PDO::PARAM_STR;
             $stmt->bindParam(':value', $value, $param_type);
             $stmt->execute();
-            if ($stmt->rowCount() > 0) {
-                return $this->conexion->lastInsertId();
-            }
 
-            throw new \RuntimeException('No se actualizaron filas');
-        } catch (PDOException $e) {
-            throw new PDOException("Error in Jenyus\Base\DynamicModel: " . $e->getMessage(), 500);
+            if ($stmt->rowCount() > 0) {
+                return true; // Indicar que se eliminó exitosamente
+            }
+            throw new \RuntimeException('No se eliminaron filas');
+        } catch (\PDOException $e) {
+            throw new \PDOException("Error in Jenyus\Base\DynamicModel: " . $e->getMessage(), 500);
         } catch (\Exception $e) {
-            throw new Exception("Error in Jenyus\Base\DynamicModel: " . $e->getMessage(), 500);
+            throw new \Exception("Error in Jenyus\Base\DynamicModel: " . $e->getMessage(), 500);
         }
     }
 }
