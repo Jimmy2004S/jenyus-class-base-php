@@ -211,3 +211,5 @@ $students = $model->all();
 ```
 
 
+## Actualizaciones
+https://github.com/Jimmy2004S/jenyus-class-base-php/blob/main/CHANGELOG.md
