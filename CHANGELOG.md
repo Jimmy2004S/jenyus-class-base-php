@@ -11,12 +11,12 @@ Todos los cambios notables en este proyecto se documentarán en este archivo.
 ### Corregido
 
 
-## [1.1.0] - 2024-07-27
-### Añadido
+### [1.1.0] - 2024-07-27
+#### Añadido
 - Pasar el argumento de la tabla  por medio del mismo constructor
 
-### Cambiado
-- Metodo retornan valores mas coherentes.
+#### Cambiado
+- Metodos retornan valores mas coherentes.
 - Se agregan las anotaciones para las excepciones que deben ser manejadas en cada metodo
 
 
