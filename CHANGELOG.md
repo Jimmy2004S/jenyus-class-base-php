@@ -7,6 +7,7 @@ Todos los cambios notables en este proyecto se documentarán en este archivo.
 ## [No lanzado]
 ### Añadido
 - Uso de transacciones para mantener la coherencia de los datos
+- Funcionalidad de autentificacion
 
 ### Corregido
 
