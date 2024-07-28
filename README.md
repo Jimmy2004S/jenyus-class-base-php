@@ -86,14 +86,16 @@ class User extends DynamicModel
 
 Utiliza los métodos proporcionados por DynamicModel para ejecutar consultas en la base de datos. Aquí tienes algunos ejemplos:
 
-Crear una instancia del modelo
+```php
+// Crear una instancia del modelo
   $userModel = new User();
 
-* obtener todos los usuarios
+// Obtener todos los usuarios
 $users = $userModel->all();
  
-* obtener un usuario por ID
-$user = $userModel->find(1)->first();
+// Obtener un usuario por ID
+$user = $userModel->find(1);
+```
 
 
 
@@ -106,28 +108,35 @@ Ejecuta una consulta SQL personalizada.
 #### - all($columns = ['*'])
 Ejecuta una consulta para obtener todos los registros y recibe como parametro opcional un arreglo con las columnas deseadas.
 
-```$users = $userModel->all(
+```php
+$users = $userModel->all(
    ['id', 'nombre', 'email']
-);```
+);
+```
 
 #### - where($column, $value, $operator, $columns = ['*'])
 Ejecuta una consulta con una cláusula WHERE. 
 
-```$users = $userModel->where('estado', 'activo')->get();```
+```php
+$users = $userModel->where('estado', 'activo')->get();
 
-```$users = $userModel->where('estado', 'activo', '!=',
+$users = $userModel->where('estado', 'activo', '!=',
    ['user_name', 'role']
-)->get();```
+)->get();
+```
 
 #### - find($value, $columns = ['*'], $operator = '=', $column = 'id')
 Ejecuta una consulta para encontrar un registro por ID u otra columna.
 
-```$user = $userModel->find(2)->first(); //Este es el uso mas simple, si se desea realizar otros metodos de busqueda se recomienda usar el metodo where ( aunque este metodo tambien permite algunos) ``` 
+```php
+$user = $userModel->find(2)->first(); //Este es el uso mas simple, si se desea realizar otros metodos de busqueda se recomienda usar el metodo where ( aunque este metodo tambien permite algunos)
+ ``` 
 
 #### - insert($columns = [])
 Ejecuta una consulta de inserción en la base de datos. Recibe como parametro un array asociativo con las columnas y valores a insertar.
 
- ``` $id = $userModel->insert([
+ ```php
+ $id = $userModel->insert([
                 'nombre' => 'Manuel', 
                 'email' => 'Suarez', 
                 'role' => 1
@@ -137,7 +146,8 @@ Ejecuta una consulta de inserción en la base de datos. Recibe como parametro un
 #### - update($columns = [], $value, $operator = '=', $column = 'id')
 Ejecuta una consulta de actualización en la base de datos.
 
- ``` $id = $userModel->update([
+ ```php
+$id = $userModel->update([
                 'nombre' => 'Manuel', 
                 'email' => 'Anaya', 
                 'role' => 2
@@ -148,7 +158,9 @@ Ejecuta una consulta de actualización en la base de datos.
 #### - delete($value, $operator = '=', $column = 'id')
 Ejecuta una consulta de eliminación en la base de datos.
 
- ``` $bolean = $userModel->delete(44);```
+ ```php
+ $bolean = $userModel->delete(44);
+```
 
 
 ## Manejo de Excepciones
