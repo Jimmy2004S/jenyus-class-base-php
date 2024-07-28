@@ -186,15 +186,19 @@ try {
 } catch (Exception $e) {
     echo "Error interno: " . $e->getMessage();
 }
-
+```
 
 # Notas
-#### Columna created_at
+### Columna created_at
    * Las tablas en tu base de datos necesitan tener una columna llamada created_at. La clase 'DynamicModel' maneja automaticamente, la fecha actual en la que se crea el registro.
    * Si no estas usando esta columna puedes pasar en el metodo insert un 'false' como segundo parametro.
-     ```class->insert([] , false)```
-#### Metodos mas faciles de usar los metodos
-   * Luego de haber extendido tu clase modelo de mi la clase 'DynamicModel' puedes usar las mismas instancias de esa unica clase para hacer distintas consultas
+     ```php
+class->insert([] , false)
+```
+
+
+### Metodos mas sencillos para usar los metodos
+   * Luego de haber extendido tu clase modelo de la clase 'DynamicModel' puedes usar las mismas instancias para hacer distintas consultas
 
  ```php
 namespace App\Model;
