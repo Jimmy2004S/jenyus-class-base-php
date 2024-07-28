@@ -192,8 +192,9 @@ try {
 ### Columna created_at
    * Las tablas en tu base de datos necesitan tener una columna llamada created_at. La clase 'DynamicModel' maneja automaticamente, la fecha actual en la que se crea el registro.
    * Si no estas usando esta columna puedes pasar en el metodo insert un 'false' como segundo parametro.
-     ```php
-class->insert([] , false)
+     
+```php
+user->insert([] , false);
 ```
 
 
