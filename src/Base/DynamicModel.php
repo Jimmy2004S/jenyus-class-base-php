@@ -148,7 +148,7 @@ class DynamicModel
             $stmt = $this->conexion->prepare($sql);
             $stmt->execute();
             $this->query = $stmt;
-            if( $stmt->rowCount() > 0){
+            if ($stmt->rowCount() > 0) {
                 return $this->get();
             }
             return false;
@@ -186,7 +186,7 @@ class DynamicModel
             $param_type = is_int($value) ? \PDO::PARAM_INT : \PDO::PARAM_STR;
             $stmt->bindParam(':value', $value, $param_type);
             $stmt->execute();
-            if($stmt->rowCount() > 0){
+            if ($stmt->rowCount() > 0) {
                 $this->query = $stmt;
                 return $this;
             }
@@ -227,7 +227,7 @@ class DynamicModel
             $param_type = is_int($value) ? \PDO::PARAM_INT : \PDO::PARAM_STR;
             $stmt->bindParam(':value', $value, $param_type);
             $stmt->execute();
-            if($stmt->rowCount() > 0){
+            if ($stmt->rowCount() > 0) {
                 $this->query = $stmt;
                 return $this->first();
             }
@@ -391,5 +391,42 @@ class DynamicModel
         } catch (\Exception $e) {
             throw new \Exception("Error in Jenyus\Base\DynamicModel: " . $e->getMessage(), 500);
         }
+    }
+
+    /**
+     * Busca un registro en la tabla con la condición especificada.
+     *
+     * @param array $columns Array asociativo con columnas a evaluar ( example: username or email, password)
+     * @return boolean True si la autenticacion es correcta
+     * @return null Si el usuario no existe
+     * @throws InvalidArgumentException Si los argumentos no son válidos.
+     */
+    public function login($columns = [])
+    {
+        if(count($columns) > 2) {
+            throw new \InvalidArgumentException("No puedes usar mas de dos campos para este metodo de autenticacion" , 400);
+        }
+
+
+        if(!array_key_exists('password', $columns) && !array_key_exists('contraseña' , $columns)) {
+            throw new \InvalidArgumentException("Debe existir un campo de contraseña o password para este metodo de autenticacion", 400);
+        }
+
+        $this->getTable(); // Asegúrate de que la tabla esté definida
+        if (!is_array($columns) || array_values($columns) === $columns) {
+            throw new InvalidArgumentException("Error in Jenyus\Base\DynamicModel: The argument must be an associative array", 422);
+        }
+        $key = array_key_first($columns);
+        $user = $this->where($key, $columns[$key], '=', ['password'])->first();
+        if (!$user) {
+            return null;
+        }
+        next($columns);
+        // Obtiene la segunda clave
+        $key2 = key($columns);
+        if (password_verify($columns[$key2], $user['password'])) {
+            return true;
+        }
+        return false;
     }
 }

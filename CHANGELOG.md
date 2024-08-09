@@ -6,9 +6,13 @@ Todos los cambios notables en este proyecto se documentarán en este archivo.
 
 ## [No lanzado]
 ### Añadido
-- Uso de transacciones para mantener la coherencia de los datos
 
 ### Corregido
+
+
+## [1.1.1] - 2024-07-27
+### Añadido
+- Metodo de login para contraseñas encriptadas (bcrypt)
 
 
 ## [1.1.0] - 2024-07-27
