@@ -6,6 +6,7 @@ Todos los cambios notables en este proyecto se documentarán en este archivo.
 
 ## [No lanzado]
 ### Añadido
+- Uso de transacciones para mantener la coherencia de los datos
 
 ### Corregido
 
@@ -15,12 +16,12 @@ Todos los cambios notables en este proyecto se documentarán en este archivo.
 - Metodo de login para contraseñas encriptadas (bcrypt)
 
 
-## [1.1.0] - 2024-07-27
-### Añadido
+### [1.1.0] - 2024-07-27
+#### Añadido
 - Pasar el argumento de la tabla  por medio del mismo constructor
 
-### Cambiado
-- Metodo retornan valores mas coherentes.
+#### Cambiado
+- Metodos retornan valores mas coherentes.
 - Se agregan las anotaciones para las excepciones que deben ser manejadas en cada metodo
 
 
