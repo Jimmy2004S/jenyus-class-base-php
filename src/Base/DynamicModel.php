@@ -148,7 +148,10 @@ class DynamicModel
             $stmt = $this->conexion->prepare($sql);
             $stmt->execute();
             $this->query = $stmt;
-            return $this->get();
+            if( $stmt->rowCount() > 0){
+                return $this->get();
+            }
+            return false;
         } catch (PDOException $e) {
             throw new PDOException('Error in Jenyus\Base\DynamicModel: ' . $e->getMessage(), 500);
         }
@@ -183,8 +186,11 @@ class DynamicModel
             $param_type = is_int($value) ? \PDO::PARAM_INT : \PDO::PARAM_STR;
             $stmt->bindParam(':value', $value, $param_type);
             $stmt->execute();
-            $this->query = $stmt;
-            return $this;
+            if($stmt->rowCount() > 0){
+                $this->query = $stmt;
+                return $this;
+            }
+            return false;
         } catch (InvalidArgumentException $e) {
             throw new InvalidArgumentException("Error in Jenyus\Base\DynamicModel: The argument is not correct", 422);
         } catch (PDOException $e) {
@@ -221,8 +227,11 @@ class DynamicModel
             $param_type = is_int($value) ? \PDO::PARAM_INT : \PDO::PARAM_STR;
             $stmt->bindParam(':value', $value, $param_type);
             $stmt->execute();
-            $this->query = $stmt;
-            return $this->first();
+            if($stmt->rowCount() > 0){
+                $this->query = $stmt;
+                return $this->first();
+            }
+            return false;
         } catch (PDOException $e) {
             throw new PDOException("Error in Jenyus\Base\DynamicModel: " . $e->getMessage(), 500);
         } catch (Exception $e) {
@@ -278,7 +287,7 @@ class DynamicModel
                 return $this->conexion->lastInsertId();
             }
 
-            throw new \RuntimeException('Jenyus\Base\DynamicModel: No se insertaron filas', 204);
+            return false;
         } catch (PDOException $e) {
             throw new PDOException("Error in Jenyus\Base\DynamicModel: " . $e->getMessage(), 500);
         } catch (\Exception $e) {
@@ -376,7 +385,7 @@ class DynamicModel
             if ($stmt->rowCount() > 0) {
                 return true; // Indicar que se eliminó exitosamente
             }
-            throw new \RuntimeException('No se eliminaron filas');
+            return false;
         } catch (\PDOException $e) {
             throw new \PDOException("Error in Jenyus\Base\DynamicModel: " . $e->getMessage(), 500);
         } catch (\Exception $e) {
