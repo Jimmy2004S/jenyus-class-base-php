@@ -6,10 +6,20 @@ Todos los cambios notables en este proyecto se documentarán en este archivo.
 
 ## [No lanzado]
 ### Añadido
-- Uso de transacciones para mantener la coherencia de los datos
+- 
 
 ### Corregido
 
+## [1.1.2] - 2024-12-08
+### Añadido
+- Metodo para generar token de autenticacion
+
+#### Cambiado
+- Se elimina el atributo protected $table de la clase
+- El constructor de la clase exige como segundo parametro el atributo $table
+
+### Corregido
+- Metodo login devuelve su propia instancia para aceptar el metodo generateToken ( opcional)
 
 ## [1.1.1] - 2024-07-27
 ### Añadido

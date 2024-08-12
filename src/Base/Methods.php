@@ -3,6 +3,7 @@
 namespace Jenyus\Base;
 
 use InvalidArgumentException;
+use Jenyus\Base\Util\Auth;
 use Jenyus\Base\Util\ModelFormat;
 use Jenyus\Base\Util\sqlConstruct;
 use PDO;
@@ -12,7 +13,7 @@ use RuntimeException;
 class Methods
 {
 
-    use ModelFormat, sqlConstruct;
+    use ModelFormat, sqlConstruct, Auth;
 
     protected $conexion;
     protected $table;

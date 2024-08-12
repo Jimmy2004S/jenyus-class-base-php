@@ -70,13 +70,12 @@ use Jenyus\Base\DynamicModel;
 
 class User extends DynamicModel
 {
-    protected $table = 'users'; // Nombre de la tabla en la base de datos
 
     public function __construct()
     {
         $this->connection = DB::getConnection();
          // Llama al constructor del padre (DynamicModel) pasando la conexion a tu base de datos
-        parent::__construct($this->connection);  
+        parent::__construct($this->connection, 'users');  
     }
 }
 ```
@@ -161,7 +160,16 @@ Ejecuta una consulta de eliminación en la base de datos.
  ```php
  $bolean = $userModel->delete(44);
 ```
+#### - login($columns = [])
+Metodo para inicios de sesion con contraseñas encriptadas
 
+
+ ```php
+    $response = $user->login([
+        'email' => 'jimmisitho450@gmail.com',
+        'password' => 'admin'
+    ])->generateToken(['admin', 'user']);
+```
 
 ## Manejo de Excepciones
 
@@ -227,6 +235,15 @@ $students = $model->all();
 
 ```
 
+### Autenticacion
+El metodo login() usa verificacion de contraseña encriptada (hashing Bcrypt) 
+para su uso tiene debes.
+
+ * Metodo create() : Pasar el valor ya encriptado en el campo de contraseña, usando el mismo metodo de encriptacion que provee php:
+ 
+ ```php
+ password_hash($password, PASSWORD_BCRYPT);
+```
 
 ## Actualizaciones
 https://github.com/Jimmy2004S/jenyus-class-base-php/blob/main/CHANGELOG.md

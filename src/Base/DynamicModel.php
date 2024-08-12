@@ -12,7 +12,6 @@ use PDOException;
 class DynamicModel extends Methods
 {
 
-    use Auth;
     /**
      * Constructor de la clase DynamicModel.
      * 

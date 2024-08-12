@@ -7,11 +7,13 @@ use InvalidArgumentException;
 trait Auth
 {
 
+    protected $model_id;
+
     /**
      * Busca un registro en la tabla con la condición especificada.
      *
      * @param array $columns Array asociativo con columnas a evaluar ( example: username or email, password)
-     * @return true True si la autenticacion es correcta
+     * @return $this True si la autenticacion es correcta
      * @return null Si el usuario no existe
      * @return false Si la contraseña es incorrecta
      * @throws InvalidArgumentException Si los argumentos no son válidos.
@@ -33,7 +35,7 @@ trait Auth
         $key = array_key_first($columns);
 
         // Busca el usuario en la base de datos
-        $user = $this->where($key, $columns[$key], '=', ['password'])->first();
+        $user = $this->where($key, $columns[$key], '=', ['password', 'id'])->first();
 
         if (!$user) {
             return null;
@@ -46,9 +48,63 @@ trait Auth
         $key2 = key($columns);
 
         if (password_verify($columns[$key2], $user['password'])) {
-            return true;
+            $this->model_id = $user['id'];
+            return $this;
         }
 
         return false;
+    }
+
+
+    /**
+     * Crea un token para el usuario logueado
+     * 
+     * Arquitectura mvc por lo cual
+     * $columns['tokenable_type'] = 'App\Model\\' . $model;
+     * nota: este campo no representa conflictos, podrias bien no usarlo.
+     *
+     * @param array $columns Array asociativo con columnas a insertar
+     * @param array $abilities Array con las habilidades que tendra el token
+     * @param array $table String con el nombre de la tabla para los token ( por defecto: 'personal_access_tokens' )
+     * @return string token generado para la session del usuario : 'model_id|hash'
+     * @return false Si no se genero ningun token
+     * @throws InvalidArgumentException Si no hay un id valido o intento de sesion.
+     */
+    public function generateToken($abilities = [], $name = 'auth_token', $columns = ['tokenable_type' => '', 'tokenable_id' => '', 'name' => '', 'token' => '', 'abilities' => ['']], $table = 'personal_access_tokens')
+    {
+        if (!$this->model_id) {
+            throw new InvalidArgumentException("User is not authenticated, unable to generate token.");
+        }
+
+        $token = $this->model_id . '|' .bin2hex(random_bytes(32));
+        $columns['token'] = $token;
+        $columns['tokenable_id'] = $this->model_id;
+        $model = substr($this->table, 0, -1);
+        $model = ucfirst($model);
+        $columns['tokenable_type'] = 'App\Model\\' . $model;
+        $columns['abilities'] = json_encode($abilities);
+        $columns['name'] = $name;
+
+        try {
+
+            $sql = $this->insertSQL($columns, $table);
+
+            $values = [];
+
+            foreach ($columns as $key => $value) {
+                $values[':' . $key] = $value;
+            }
+
+            $this->prepare($sql);
+
+            $this->bindValue($values, $this->query);
+
+            $this->query->execute();
+
+            return ($this->query->rowCount() > 0)  ? $token : false;
+
+        } catch (\PDOException $e) {
+            throw new \PDOException("Error generating token: " . $e->getMessage(), 500);
+        }
     }
 }
