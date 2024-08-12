@@ -71,11 +71,12 @@ use Jenyus\Base\DynamicModel;
 class User extends DynamicModel
 {
 
+    protected $table = 'users';
     public function __construct()
     {
         $this->connection = DB::getConnection();
          // Llama al constructor del padre (DynamicModel) pasando la conexion a tu base de datos
-        parent::__construct($this->connection, 'users');  
+        parent::__construct($this->connection);  
     }
 }
 ```
@@ -221,7 +222,8 @@ class Model extends DynamicModel
     {
         $this->connection = DB::getConnection();
          // Llama al constructor del padre (DynamicModel) pasando la conexion a tu base de datos
-        parent::__construct($this->connection, $table);  
+        parent::__construct($this->connection);
+        parent::setTable($this->table);  
     }
 }
 
