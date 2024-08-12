@@ -12,6 +12,7 @@ use PDOException;
 class DynamicModel extends Methods
 {
 
+    protected $table;
     /**
      * Constructor de la clase DynamicModel.
      * 
@@ -19,15 +20,22 @@ class DynamicModel extends Methods
      * @param $table Definir la tabla con la que trabajaras.
      * @throws PDOException Si no se proporciona una instancia válida de PDO.
      */
-    public function __construct(PDO $conexion, $table)
+    public function __construct(PDO $conexion, $table = null)
     {
         if (!$conexion instanceof PDO) {
             throw new InvalidArgumentException("Error in Jenyus\Base\DynamicModel: Se requiere una instancia válida de PDO.", 422);
         }
-        if (!$table || empty($table) || $table == '') {
+
+        if ((!$table || empty($table) || $table == '') && (!$this->table || empty($this->table) || $this->table == '')) {
             throw new InvalidArgumentException("Error in Jenyus\Base\DynamicModel: La propiedad 'table' no puede ser null, debe proporcionar un valor en dentro del constructor de la clase.", 422);
         }
-        parent::__construct($conexion, $table);
+
+        if(!$table || empty($table) || $table == ''){
+            $table = $this->table;
+        }
+
+        parent::__construct($conexion);
+        parent::SetTable($table);
     }
 
     public function setTable($table){

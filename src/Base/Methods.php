@@ -19,10 +19,9 @@ class Methods
     protected $table;
     protected $query;
 
-    public function __construct(PDO $conexion, $table)
+    public function __construct(PDO $conexion)
     {
         $this->conexion = $conexion;
-        $this->table = $table;
     }
 
     /**
