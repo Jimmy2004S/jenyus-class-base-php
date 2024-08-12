@@ -30,12 +30,9 @@ class DynamicModel extends Methods
             throw new InvalidArgumentException("Error in Jenyus\Base\DynamicModel: La propiedad 'table' no puede ser null, debe proporcionar un valor en dentro del constructor de la clase.", 422);
         }
 
-        if(!$table || empty($table) || $table == ''){
-            $table = $this->table;
-        }
-
+        $table = $table ?? $this->table;
         parent::__construct($conexion);
-        parent::SetTable($table);
+        parent::setTable($table);
     }
 
     public function setTable($table){

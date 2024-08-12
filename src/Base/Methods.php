@@ -28,7 +28,6 @@ class Methods
      * Establece la tabla en la que se ejecutarán las consultas.
      * 
      * @param string $table Nombre de la tabla en la base de datos.
-     * @return $this
      */
     protected function SetTable($table)
     {
