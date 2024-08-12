@@ -70,7 +70,7 @@ trait sqlConstruct
         return "UPDATE {$table} SET {$sets} WHERE $column $operator :value";
     }
 
-    public function deleteSQL($value, $operator, $column, $table){
+    public function deleteSQL($operator, $column, $table){
         return "DELETE FROM {$table} WHERE $column $operator :value";
     }
 

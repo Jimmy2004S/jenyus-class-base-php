@@ -3,6 +3,7 @@
 namespace Jenyus\Base\Util;
 
 use InvalidArgumentException;
+use PDOException;
 
 trait Auth
 {
@@ -76,7 +77,7 @@ trait Auth
             throw new InvalidArgumentException("User is not authenticated, unable to generate token.");
         }
 
-        $token = $this->model_id . '|' .bin2hex(random_bytes(32));
+        $token = $this->model_id . '|' . bin2hex(random_bytes(32));
         $columns['token'] = $token;
         $columns['tokenable_id'] = $this->model_id;
         $model = substr($this->table, 0, -1);
@@ -102,9 +103,62 @@ trait Auth
             $this->query->execute();
 
             return ($this->query->rowCount() > 0)  ? $token : false;
-
         } catch (\PDOException $e) {
-            throw new \PDOException("Error generating token: " . $e->getMessage(), 500);
+            throw new \PDOException("Error generating token in Jenyus\Base\DynamicModel: " . $e->getMessage(), 500);
+        }
+    }
+
+
+    /**
+     * Borrar todos los tokens ( todas las sesiones del usuario )
+     *
+     * @param string $token token generado en la session
+     * @param string $table tabla que manejas para los tokens ( default = 'personal_access_tokens')
+     * @param array $table String con el nombre de la tabla para los token ( por defecto: 'personal_access_tokens' )
+     * @return boolean 
+     * @throws PDOException
+     */
+    public function revokarTokens($token, $table = 'personal_access_tokens')
+    {
+        $sql = $this->deleteSQL('=', 'tokenable_id', $table);
+        $token = explode('|', $token);
+        try {
+            $this->prepare($sql);
+
+            $this->bindParam($token[0], $this->query);
+
+            $this->query->execute();
+
+            return ($this->query->rowCount() > 0) ? true : false;
+        } catch (PDOException $e) {
+            throw new PDOException("Error revoking tokens in Jenyus\Base\DynamicModel: " . $e->getMessage(), 500);
+        }
+    }
+
+    /**
+     * Borrar un token ( session actual )
+     * 
+     * @param string $token token generado en la session
+     * @param string $table tabla que manejas para los tokens ( default = 'personal_access_tokens')
+     * @param array $table String con el nombre de la tabla para los token ( por defecto: 'personal_access_tokens' )
+     * @return boolean 
+     * @throws PDOException 
+     */
+    public function revokarToken($token, $table = 'personal_access_tokens')
+    {
+
+        $sql = $this->deleteSQL('=', 'token', $table);
+
+        try {
+            $this->prepare($sql);
+
+            $this->bindParam($token, $this->query);
+
+            $this->query->execute();
+
+            return ($this->query->rowCount() > 0) ? true : false;
+        } catch (PDOException $e) {
+            throw new PDOException("Error revoking tokens in Jenyus\Base\DynamicModel: " . $e->getMessage(), 500);
         }
     }
 }

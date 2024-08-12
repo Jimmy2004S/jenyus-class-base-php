@@ -10,6 +10,10 @@ Todos los cambios notables en este proyecto se documentarán en este archivo.
 
 ### Corregido
 
+## [1.1.3] - 2024-12-08
+### Añadido
+- Metodo para eliminar tokens
+
 ## [1.1.2] - 2024-12-08
 ### Añadido
 - Metodo para generar token de autenticacion

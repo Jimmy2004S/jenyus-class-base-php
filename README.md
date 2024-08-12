@@ -162,14 +162,25 @@ Ejecuta una consulta de eliminación en la base de datos.
  $bolean = $userModel->delete(44);
 ```
 #### - login($columns = [])
-Metodo para inicios de sesion con contraseñas encriptadas
+Metodo para inicio de sesion con contraseñas encriptadas
 
 
  ```php
     $response = $user->login([
-        'email' => 'jimmisitho450@gmail.com',
+        'email' => 'example.admin@gmail.com',
         'password' => 'admin'
-    ])->generateToken(['admin', 'user']);
+    ]);
+```
+
+#### - generate($abilities, $name = 'auth_token', $columns, $table) and revokarTokens($columns = [])
+Invdalidar los tokens para las sessiones
+
+ ```php
+    $token = $user->login([])
+        ->generateToken(['admin', 'user'], 'mi_token');
+
+    $boolean = $user->revokarToken($token);
+    $boolean = $user->revokarTokens($token);
 ```
 
 ## Manejo de Excepciones
