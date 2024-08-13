@@ -77,7 +77,7 @@ trait Auth
             throw new InvalidArgumentException("User is not authenticated, unable to generate token.");
         }
 
-        $token = $this->model_id . '|' . bin2hex(random_bytes(32));
+        $token = bin2hex(random_bytes(32));
         $columns['token'] = $token;
         $columns['tokenable_id'] = $this->model_id;
         $model = substr($this->table, 0, -1);
@@ -102,7 +102,10 @@ trait Auth
 
             $this->query->execute();
 
+            $token = $this->model_id . '|' . $token;
+
             return ($this->query->rowCount() > 0)  ? $token : false;
+
         } catch (\PDOException $e) {
             throw new \PDOException("Error generating token in Jenyus\Base\DynamicModel: " . $e->getMessage(), 500);
         }
@@ -149,10 +152,11 @@ trait Auth
 
         $sql = $this->deleteSQL('=', 'token', $table);
 
+        $token = explode('|', $token);
         try {
             $this->prepare($sql);
 
-            $this->bindParam($token, $this->query);
+            $this->bindParam($token[1], $this->query);
 
             $this->query->execute();
 

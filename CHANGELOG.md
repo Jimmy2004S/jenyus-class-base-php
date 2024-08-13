@@ -10,6 +10,12 @@ Todos los cambios notables en este proyecto se documentarán en este archivo.
 
 ### Corregido
 
+## [1.1.4] - 2024-12-08
+
+### Corregido
+- Se devuelve un string con una copia del token mas el id para facilitar su uso
+- Correcion del metodo eliminar token individual
+
 ## [1.1.3] - 2024-12-08
 ### Añadido
 - Metodo para eliminar tokens
