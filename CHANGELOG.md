@@ -10,10 +10,11 @@ Todos los cambios notables en este proyecto se documentarán en este archivo.
 
 ### Corregido
 
-## [1.1.4] - 2024-12-08
+## [1.1.5] - 2024-12-08
 
 ### Corregido
-- Metodo eliminar
+- Metodo delete
+- Metodo update
 
 ## [1.1.4] - 2024-12-08
 

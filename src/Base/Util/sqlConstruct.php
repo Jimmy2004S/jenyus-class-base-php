@@ -61,8 +61,8 @@ trait sqlConstruct
         }
 
         $sets = "";
-        foreach ($columns as $column => $value) {
-            $sets .= "$column = :$column, ";
+        foreach ($columns as $key => $value) {
+            $sets .= "$key = :$key, ";
         }
 
         $sets = rtrim($sets, ', ');

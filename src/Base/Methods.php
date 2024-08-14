@@ -273,24 +273,26 @@ class Methods
     public function update($columns, $value, $operator = '=', $column = 'id')
     {
 
-        $user = $this->find($value, ['id'], $operator, $column);
+        $data = $this->find($value, ['id'], $operator, $column);
 
-        if (!$user) {
+        if (!$data) {
             throw new RuntimeException("Error in Jenyus\Base\DynamicModel: el recurso no existe", 404);
         }
 
-        $sql = $this->updateSQL($columns, $value, $operator, $column, $this->table);
+        $sql = $this->updateSQL($columns, $operator, $column, $this->table);
 
         try {
 
             $this->prepare($sql);
+            
             $this->bindValue($columns, $this->query);
             // Enlazar el valor para la cláusula WHERE
             $this->bindParam($value, $this->query);
 
             $this->query->execute();
 
-            return ($this->query->rowCount() > 0) ? $user['id'] : false;
+            return ($this->query->rowCount() > 0) ? $data['id'] : false;
+
         } catch (PDOException $e) {
             throw new PDOException("Error in Jenyus\Base\DynamicModel: " . $e->getMessage(), 500);
         }
