@@ -10,7 +10,12 @@ Todos los cambios notables en este proyecto se documentarán en este archivo.
 
 ### Corregido
 
-## [1.1.5] - 2024-12-08
+## [1.1.6] - 2024-14-08
+
+### Añadido
+- Realizar consultas con where anidados (AND, OR)
+
+## [1.1.5] - 2024-13-08
 
 ### Corregido
 - Metodo delete

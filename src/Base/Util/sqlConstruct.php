@@ -4,11 +4,16 @@ namespace Jenyus\Base\Util;
 
 use InvalidArgumentException;
 use PDO;
+use PDOException;
 
 trait sqlConstruct
 {
 
-    public static function bindValue($values, $query)
+    private $where = [];
+    private $values = [];
+    private  $columns = '';
+
+    public function bindValue($values, $query)
     {
         // Asignar valores a los placeholders
         foreach ($values as $key => $value) {
@@ -17,13 +22,23 @@ trait sqlConstruct
         }
     }
 
-    public static function bindParam($value, $query)
+    public function bindValue2($values, $query)
+    {
+        foreach ($values as $key => $value) {
+            $placeholder = ":value{$key}"; // Generar placeholders dinámicos como :value0, :value1, etc.
+            $param_type = is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR;
+            $query->bindValue($placeholder, $value, $param_type);
+        }
+    }
+
+
+    public function bindParam($value, $query)
     {
         $param_type = is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR;
         $query->bindParam(':value', $value, $param_type);
     }
 
-    public static function insertSQL($columns, $table)
+    public function insertSQL($columns, $table)
     {
         $columnNames = '';
         $placeholders = '';
@@ -40,22 +55,62 @@ trait sqlConstruct
         return "INSERT INTO {$table} ({$columnNames}) VALUES ({$placeholders})";
     }
 
-    public static function whereSQL($value, $columns = ['*'], $operator = '=', $column = 'id', $table)
+    public function whereSQL($column = 'id', $operator = '=', $value, $columns = ['*'])
     {
-        // Convertir el array de columnas en una cadena separada por comas
         $columnsStr = implode(', ', $columns);
 
-        // Construir la consulta preparada
-        return "SELECT {$columnsStr} FROM {$table} WHERE {$column} {$operator} :value";
+        $placeholder = ":value" . count($this->values);
+
+        if ($this->where) {
+            $this->where[] = " AND {$column} {$operator} {$placeholder}";
+        } else {
+            $this->columns = $columnsStr;
+            $this->where[] = "WHERE {$column} {$operator} {$placeholder}";
+        }
+
+        $whereStr = implode(' ', $this->where);
+
+        $this->values[] = $value;
+
+        $sql = "SELECT {$this->columns} FROM {$this->table} {$whereStr}";
+
+        $this->prepare($sql);
+
+        $this->bindValue2($this->values, $this->query);
     }
 
-    public function selectSQL($columns, $table){
+    public function orWhereSQL($column = 'id', $operator = '=', $value)
+    {
+
+        $placeholder = ":value" . count($this->values);
+
+        if ($this->where) {
+            $this->where[] = " OR {$column} {$operator} {$placeholder}";
+        } else {
+            throw new PDOException("Llama al metodo where antes del metodo orWhere", 400);
+        }
+
+        $whereStr = implode(' ', $this->where);
+
+        $this->values[] = $value;
+
+        $sql = "SELECT {$this->columns} FROM {$this->table} {$whereStr}";
+
+        $this->prepare($sql);
+
+        $this->bindValue2($this->values, $this->query);
+    }
+
+
+    public function selectSQL($columns, $table)
+    {
         $columnsStr = implode(', ', $columns);
         return "SELECT {$columnsStr} FROM {$table}";
     }
 
-    public function updateSQL($columns, $operator, $column, $table){
-        
+    public function updateSQL($columns, $operator, $column, $table)
+    {
+
         if (!is_array($columns)) {
             throw new InvalidArgumentException("Error in Jenyus\Base\DynamicModel: The argument must be associative array");
         }
@@ -70,8 +125,8 @@ trait sqlConstruct
         return "UPDATE {$table} SET {$sets} WHERE $column $operator :value";
     }
 
-    public function deleteSQL($column, $operator, $table){
+    public function deleteSQL($column, $operator, $table)
+    {
         return "DELETE FROM {$table} WHERE $column $operator :value";
     }
-
 }

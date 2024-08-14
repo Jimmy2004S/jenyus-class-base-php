@@ -123,6 +123,12 @@ $users = $userModel->where('estado', 'activo')->get();
 $users = $userModel->where('estado', 'activo', '!=',
    ['user_name', 'role']
 )->get();
+
+//Tambien puedes resumir las consultas con varios where
+$users = $userModel->where('estado', 'activo'
+)->where('role_id' , 2)
+->orWhere('role_id' , 1)
+->get();
 ```
 
 #### - find($value, $columns = ['*'], $operator = '=', $column = 'id')
@@ -218,7 +224,7 @@ user->insert([] , false);
 ```
 
 
-### Metodos mas sencillos para usar los metodos
+### Formas mas sencillas para usar los metodos
    * Luego de haber extendido tu clase modelo de la clase 'DynamicModel' puedes usar las mismas instancias para hacer distintas consultas
 
  ```php
@@ -247,6 +253,18 @@ $model->SetTable('students');
 $students = $model->all();
 
 ```
+
+### Metodos where
+
+* No puedes llamar el metodo orWhere sin antes haber llamado el metodo where
+* Si deseas selecionar las columnas a devolver en la consulta debes pasarlo unicamente en el primer where ( en el resto de where no sera tomado en cuenta )
+
+ ```php
+$users = $userModel->where('estado', 'activo'
+)->where('role_id' , 2, ['id', 'user_name'])
+->orWhere('role_id' , 1)
+->get();
+ ```
 
 ### Autenticacion
 El metodo login() usa verificacion de contraseña encriptada (hashing Bcrypt) 

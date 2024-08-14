@@ -169,11 +169,40 @@ class Methods
 
         try {
 
-            $sql = $this->whereSQL($value, $columns, $operator, $column, $this->table);
+            $this->whereSQL($column, $operator, $value, $columns);
+        
+            print_r($this->query);
 
-            $this->prepare($sql);
+            $this->query->execute();
 
-            $this->bindParam($value, $this->query);
+            return $this;
+            
+        } catch (PDOException $e) {
+            throw new PDOException("Error in Jenyus\Base\DynamicModel: " . $e->getMessage(), 500);
+        }
+    }
+
+        /**
+     * Ejecuta una consulta con una cláusula WHERE.
+     * 
+     * @param string $column Columna para la condición WHERE.
+     * @param mixed $value Valor a comparar.
+     * @param string $operator Operador de comparación (por ejemplo, '=', '>', '<', etc.).
+     * @param array $columns Columnas a seleccionar (por defecto ['*']).
+     * @return $this
+     * @return array Arreglo con el resultado de la consulta.
+     * @throws InvalidArgumentException Si los argumentos no son válidos.
+     * @throws PDOException Si ocurre un error con la base de datos.
+     * @throws Exception Si ocurre un error interno.
+     */
+    public function orWhere($column, $value, $operator = '=')
+    {
+
+        try {
+
+            $this->orwhereSQL($column, $operator, $value);
+        
+            print_r($this->query);
 
             $this->query->execute();
 
