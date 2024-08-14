@@ -54,7 +54,7 @@ trait sqlConstruct
         return "SELECT {$columnsStr} FROM {$table}";
     }
 
-    public function updateSQL($columns, $value, $operator, $column, $table){
+    public function updateSQL($columns, $operator, $column, $table){
         
         if (!is_array($columns)) {
             throw new InvalidArgumentException("Error in Jenyus\Base\DynamicModel: The argument must be associative array");
@@ -70,7 +70,7 @@ trait sqlConstruct
         return "UPDATE {$table} SET {$sets} WHERE $column $operator :value";
     }
 
-    public function deleteSQL($operator, $column, $table){
+    public function deleteSQL($column, $operator, $table){
         return "DELETE FROM {$table} WHERE $column $operator :value";
     }
 

@@ -317,7 +317,7 @@ class Methods
             return;
         }
 
-        $sql = $this->deleteSQL($value, $operator, $column, $this->table);
+        $sql = $this->deleteSQL($column, $operator, $this->table);
 
         try {
 
@@ -328,6 +328,7 @@ class Methods
             $this->query->execute();
 
             return ($this->query->rowCount() > 0) ? true : false;
+            
         } catch (\PDOException $e) {
             throw new \PDOException("Error in Jenyus\Base\DynamicModel: " . $e->getMessage(), 500);
         }
