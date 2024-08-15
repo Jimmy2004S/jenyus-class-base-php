@@ -91,6 +91,8 @@ trait sqlConstruct
         $this->prepare($sql);
 
         $this->bindValue2($this->values, $this->query);
+
+        echo $this->getDebugQuery($this->query, $this->values) . '<br>';
     }
 
     public function orWhereSQL($column = 'id', $operator = '=', $value)

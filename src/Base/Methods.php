@@ -230,11 +230,7 @@ class Methods
 
         try {
 
-            $sql = $this->whereSQL($value, $columns, $operator, $column, $this->table);
-
-            $this->prepare($sql);
-
-            $this->bindParam($value, $this->query);
+            $sql = $this->whereSQL($column, $operator, $value, $columns);
 
             $this->query->execute();
 

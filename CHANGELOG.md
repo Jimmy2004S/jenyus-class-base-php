@@ -10,6 +10,12 @@ Todos los cambios notables en este proyecto se documentarán en este archivo.
 
 ### Corregido
 
+## [1.1.7] - 2024-15-08
+
+### Corregido
+- Metodo find
+
+
 ## [1.1.6] - 2024-14-08
 
 ### Añadido
