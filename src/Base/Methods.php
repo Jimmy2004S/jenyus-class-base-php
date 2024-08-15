@@ -170,8 +170,6 @@ class Methods
         try {
 
             $this->whereSQL($column, $operator, $value, $columns);
-        
-            print_r($this->query);
 
             $this->query->execute();
 
