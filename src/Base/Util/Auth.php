@@ -150,7 +150,7 @@ trait Auth
     public function revokarToken($token, $table = 'personal_access_tokens')
     {
 
-        $sql = $this->deleteSQL('=', 'token', $table);
+        $sql = $this->deleteSQL('token','=',  $table);
 
         $token = explode('|', $token);
         try {
