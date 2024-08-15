@@ -10,6 +10,15 @@ Todos los cambios notables en este proyecto se documentarán en este archivo.
 
 ### Corregido
 
+## [1.1.8] - 2024-15-08
+
+### Corregido
+- Permitir cambiar el valor del atributo $table usando la misma instancia, evitando conflicto entre consultas
+
+#### Cambiado
+- Se permite definir el atributo $table atraves del constructor (opcional)
+
+
 ## [1.1.7] - 2024-15-08
 
 ### Corregido

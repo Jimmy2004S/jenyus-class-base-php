@@ -31,6 +31,9 @@ class Methods
      */
     protected function SetTable($table)
     {
+        $this->where = [];
+        $this->values = [];
+        $this->columns = '';
         $this->table = $table;
     }
 
@@ -79,16 +82,15 @@ class Methods
             throw new \PDOException("No se ha ejecutado ninguna consulta previamente.");
         }
 
-        if($this->query->rowCount() < 0){
+        if ($this->query->rowCount() < 0) {
             return false;
         }
 
         try {
-            
+
             $result = $this->query->fetchAll(PDO::FETCH_ASSOC);
 
             return $result ?? false;
-
         } catch (PDOException $e) {
             throw new PDOException('Error in Jenyus\Base\DynamicModel: ' . $e->getMessage());
         }
@@ -107,10 +109,10 @@ class Methods
             throw new \PDOException("Error in Jenyus\Base\DynamicModel: No se ha ejecutado ninguna consulta previamente.");
         }
 
-        if($this->query->rowCount() < 0){
+        if ($this->query->rowCount() < 0) {
             return false;
         }
-        
+
         try {
 
             $result = $this->query->fetch(PDO::FETCH_ASSOC);
@@ -174,13 +176,12 @@ class Methods
             $this->query->execute();
 
             return $this;
-            
         } catch (PDOException $e) {
             throw new PDOException("Error in Jenyus\Base\DynamicModel: " . $e->getMessage(), 500);
         }
     }
 
-        /**
+    /**
      * Ejecuta una consulta con una cláusula WHERE.
      * 
      * @param string $column Columna para la condición WHERE.
@@ -199,13 +200,12 @@ class Methods
         try {
 
             $this->orwhereSQL($column, $operator, $value);
-        
+
             print_r($this->query);
 
             $this->query->execute();
 
             return $this;
-            
         } catch (PDOException $e) {
             throw new PDOException("Error in Jenyus\Base\DynamicModel: " . $e->getMessage(), 500);
         }
@@ -235,7 +235,6 @@ class Methods
             $this->query->execute();
 
             return ($this->query->rowCount() > 0) ? $this->first() : false;
-
         } catch (PDOException $e) {
             throw new PDOException("Error in Jenyus\Base\DynamicModel: " . $e->getMessage(), 500);
         }
@@ -307,7 +306,7 @@ class Methods
         try {
 
             $this->prepare($sql);
-            
+
             $this->bindValue($columns, $this->query);
             // Enlazar el valor para la cláusula WHERE
             $this->bindParam($value, $this->query);
@@ -315,7 +314,6 @@ class Methods
             $this->query->execute();
 
             return ($this->query->rowCount() > 0) ? $data['id'] : false;
-
         } catch (PDOException $e) {
             throw new PDOException("Error in Jenyus\Base\DynamicModel: " . $e->getMessage(), 500);
         }
@@ -353,7 +351,6 @@ class Methods
             $this->query->execute();
 
             return ($this->query->rowCount() > 0) ? true : false;
-            
         } catch (\PDOException $e) {
             throw new \PDOException("Error in Jenyus\Base\DynamicModel: " . $e->getMessage(), 500);
         }
