@@ -257,7 +257,7 @@ $students = $model->all();
 ### Metodos where
 
 * No puedes llamar el metodo orWhere sin antes haber llamado el metodo where
-* Si deseas selecionar las columnas a devolver en la consulta debes pasarlo unicamente en el primer where ( en el resto de where no sera tomado en cuenta )
+* Si deseas selecionar las columnas a devolver en la consulta se recomienda hacerlo en el primer where
 
  ```php
 $users = $userModel->where('estado', 'activo'

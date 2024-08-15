@@ -31,6 +31,19 @@ trait sqlConstruct
         }
     }
 
+    public function getDebugQuery($query, $values)
+    {
+        $sql = $query->queryString;
+
+        foreach ($values as $key => $value) {
+            $placeholder = ":value" . $key;
+            $value = is_int($value) ? $value : "'$value'";
+            $sql = str_replace($placeholder, $value, $sql);
+        }
+
+        return $sql;
+    }
+
 
     public function bindParam($value, $query)
     {
@@ -64,9 +77,10 @@ trait sqlConstruct
         if ($this->where) {
             $this->where[] = " AND {$column} {$operator} {$placeholder}";
         } else {
-            $this->columns = $columnsStr;
             $this->where[] = "WHERE {$column} {$operator} {$placeholder}";
         }
+
+        $this->columns = $columnsStr;
 
         $whereStr = implode(' ', $this->where);
 
