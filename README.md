@@ -32,7 +32,6 @@ Para comenzar a utilizar la clase `DynamicModel` proporcionada por este paquete,
 Asegúrate de tener una instancia de PDO configurada correctamente para tu base de datos. Aquí tienes un ejemplo básico de cómo configurar la conexión usando el patron de diseño singleton:
 
 ```php
-<?php 
 namespace DataBase\Config;
 
 class DB{
