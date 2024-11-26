@@ -7,7 +7,9 @@ Este paquete proporciona una clase base para realizar consultas dinámicas en ba
 Puedes instalar este paquete a través de Composer. 
 
 1. Crea el archivo 'composer.json' en la raiz de tu proyecto
-```{
+
+```json
+{
    // Puedes dejarlo en blanco
 }```
 
