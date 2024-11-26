@@ -8,7 +8,7 @@ Puedes instalar este paquete a través de Composer.
 
 1. Crea el archivo 'composer.json' en la raiz de tu proyecto
 
-```json
+```
 {
    // Puedes dejarlo en blanco
 }```
