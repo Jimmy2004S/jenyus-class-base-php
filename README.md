@@ -8,9 +8,10 @@ Puedes instalar este paquete a través de Composer.
 
 1. Crea el archivo 'composer.json' en la raiz de tu proyecto
 
-{
-   // Puedes dejarlo en blanco
-}
+   ```json
+   {
+      // Puedes dejarlo en blanco
+   }
 
 
 1. Instalar composer en su proyecto
